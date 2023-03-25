@@ -1,6 +1,6 @@
 # dashboard_admin
 
-- Cách chạy file backend
+- Cách chạy folder backend
   + Tạo 1 file .env trong folder backend với các thông số như sau:
     
     PORT = 8000
