@@ -10,6 +10,8 @@ export const postLogin = (user, navigate) => async (dispatch) => {
     dispatch({ type: types.LOGIN_SUCCESS, payload: res.data });
     localStorage.setItem("accessToken", res.data.accessToken);
     localStorage.setItem("isAdmin", res.data.isAdmin);
+    localStorage.setItem("id", res.data._id);
+    localStorage.setItem("currentUser", JSON.stringify(res.data));
     navigate("/");
   } catch (error) {
     dispatch({ type: types.LOGIN_ERROR, payload: error.response.msg });
@@ -71,5 +73,15 @@ export const postLogout = (id) => async (dispatch) => {
     localStorage.clear();
   } catch (error) {
     dispatch({ type: types.LOGOUT_ERROR, payload: error.message });
+  }
+};
+
+export const getUserById = (id) => async (dispatch) => {
+  dispatch({ type: types.GET_USER_ID_START });
+  try {
+    const res = await axios.get(`${BASE_URL_USER}/${id}`, { headers });
+    dispatch({ type: types.GET_USER_ID_SUCCESS, payload: res.data });
+  } catch (error) {
+    dispatch({ type: types.GET_USER_ID_ERROR, payload: error.message });
   }
 };

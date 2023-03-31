@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Card, Divider, Form, Input, message } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { updateUser } from "../../store/actions";
+import { getUserById, postLogin, updateUser } from "../../store/actions";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import * as types from "~/store/constants";
-import { BASE_URL_USER } from "~/util/api";
 import { headers } from "~/util/headers";
+import { BASE_URL_USER } from "~/util/api";
 
 const { Meta } = Card;
 
@@ -19,13 +18,10 @@ const Profile = () => {
   const [editing, setEditing] = useState(false);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [currentUser, setCurrentUser] = useState(null);
-
-  const { user } = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    setCurrentUser(user);
-  }, [currentUser]);
+  const [currentUser, setCurrentUser] = useState(() => {
+    const storedUser = window.localStorage.getItem("currentUser");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const handleDelete = () => {
     // TODO: handle delete user
@@ -36,22 +32,19 @@ const Profile = () => {
     setEditing(true);
   };
 
-  const onFinish = (values) => {
-    // TODO: handle edit user
-    dispatch(updateUser(currentUser?._id, values)).then(() => {
-      message.success("User updated");
-      setEditing(false);
-      axios
-        .get(`${BASE_URL_USER}/${currentUser?._id}`, { headers })
-        .then((res) => {
-          dispatch({ type: types.UPDATE_USER_SUCCESS, payload: res.data });
-        })
-        .catch((error) => {
-          message.error(error.message);
-        });
-    });
+  useEffect(() => {
+    if (currentUser) {
+      window.localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    } else {
+      window.localStorage.removeItem("currentUser");
+    }
+  }, [currentUser]);
 
-    setCurrentUser(values);
+  const handleUpdate = (values) => {
+    dispatch(updateUser(currentUser?._id, values));
+    message.success("User updated");
+    const usr = { ...currentUser, ...values };
+    setCurrentUser(usr);
   };
 
   return (
@@ -78,7 +71,7 @@ const Profile = () => {
         ]}
       >
         <Meta
-          title={currentUser?.username.toUpperCase()}
+          title={currentUser?.username?.toUpperCase()}
           description={`Joined: ${new Date(
             currentUser?.createdAt
           ).toLocaleDateString()}`}
@@ -90,7 +83,7 @@ const Profile = () => {
             username: currentUser?.username,
             email: currentUser?.email,
           }}
-          onFinish={onFinish}
+          onFinish={handleUpdate}
           layout="vertical"
         >
           <Form.Item

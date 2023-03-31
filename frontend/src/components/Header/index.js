@@ -23,7 +23,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = useSelector((state) => state.auth.user);
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  console.log(user);
 
   function handleOptions() {
     const showOptions = document.querySelector(".Header_dropdown-menu__7Ug8Y");

@@ -4,14 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Pagination } from "antd";
+import { Pagination, Modal } from "antd";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
 
 import styles from "./Table.module.scss";
 import { getUsers, deleteUser } from "~/store/actions";
-import { BASE_URL_AUTH } from "~/util/api";
-import { postLogin } from "../../store/actions";
+
 import Delete from "../DeleteBtn";
 
 const cx = classNames.bind(styles);
@@ -22,25 +20,26 @@ const Table = () => {
 
   let axiosJWT = axios.create();
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [userId, setUserId] = useState();
   const { user } = useSelector((state) => state.auth);
   const { users } = useSelector((state) => state.user);
-  const [userList, setUserList] = useState(null);
-
-  // const refreshToken = async () => {
-  //   try {
-  //     const res = await axios.post(`${BASE_URL_AUTH}/refresh`, {
-  //       withCredentials: true,
-  //     });
-  //     return res.data;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const [userList, setUserList] = useState([]);
 
   useEffect(() => {
-    setUserList(users);
+    dispatch(getUsers());
+  }, []);
+
+  useEffect(() => {
+    users && setUserList(users);
+    if (userList) {
+      console.log(userList);
+      const slicedUserList = userList?.slice(startIndex, endIndex);
+      setSliceUserList(slicedUserList);
+    } else {
+      setSliceUserList([]);
+    }
   }, [users]);
-  console.log(userList);
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
@@ -49,35 +48,26 @@ const Table = () => {
     dispatch(getUsers(dispatch));
   }, [dispatch, user?.accessToken]);
 
-  // axiosJWT.interceptors.request.use(
-  //   async (config) => {
-  //     let date = new Date();
-  //     const decodedToken = jwt_decode(user?.accessToken);
-  //     if (decodedToken.exp < date.getTime() / 1000) {
-  //       const data = await refreshToken();
-  //       const refreshUser = {
-  //         ...user,
-  //         accessToken: data.accessToken,
-  //       };
-  //       dispatch(postLogin(refreshUser, navigate));
-  //       config.headers["token"] = "Bearer " + data.accessToken;
-  //     }
-  //     return config;
-  //   },
-  //   (error) => {
-  //     return Promise.reject(error);
-  //   }
-  // );
-
   const handleDelete = (id) => {
-    dispatch(deleteUser(id));
-    const updatedUsers = users.filter((user) => user.id !== id);
+    setIsModalVisible(true);
+    setUserId(id);
+  };
+
+  const handleOk = () => {
+    dispatch(deleteUser(userId));
+    const updatedUsers = sliceUserList?.filter((user) => user._id !== userId);
     setUserList(updatedUsers);
-    dispatch(getUsers(dispatch));
+    dispatch(getUsers());
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
+  const [sliceUserList, setSliceUserList] = useState([]);
 
   const startIndex = (currentPage - 1) * usersPerPage;
   const endIndex = startIndex + usersPerPage;
@@ -105,7 +95,7 @@ const Table = () => {
             </tr>
           </thead>
           <tbody>
-            {userList?.slice(startIndex, endIndex).map((user, index) => (
+            {sliceUserList?.map((user, index) => (
               <tr key={index}>
                 <td>{startIndex + index + 1}</td>
                 <td>
@@ -115,8 +105,8 @@ const Table = () => {
                 <td>{user.isAdmin === false ? "user" : "admin"}</td>
                 <td>{`${new Date(user.createdAt).toLocaleDateString()}`}</td>
                 {localStorage.getItem("isAdmin") === "true" ? (
-                  <td onClick={() => handleDelete(user._id)}>
-                    <Delete />
+                  <td>
+                    <Delete handleDelete={() => handleDelete(user._id)} />
                   </td>
                 ) : (
                   ""
@@ -133,6 +123,14 @@ const Table = () => {
           showSizeChanger
           onShowSizeChange={(current, size) => setUsersPerPage(size)}
         />
+        <Modal
+          title="Delete User"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          <p>Are you sure you want to delete this user?</p>
+        </Modal>
       </div>
     </div>
   );

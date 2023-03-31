@@ -4,6 +4,7 @@ const initialStates = {
   users: null,
   loading: false,
   error: null,
+  userid: null,
 };
 
 const userReducer = (state = initialStates, actions) => {
@@ -69,6 +70,28 @@ const userReducer = (state = initialStates, actions) => {
         ...state,
         loading: false,
         users: null,
+        error: payload,
+      };
+
+    case types.GET_USER_ID_START:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case types.GET_USER_ID_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        userid: payload,
+        error: null,
+      };
+
+    case types.GET_USER_ID_ERROR:
+      return {
+        ...state,
+        loading: false,
+        userid: null,
         error: payload,
       };
 
