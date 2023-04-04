@@ -37,7 +37,8 @@
   ![image](https://user-images.githubusercontent.com/91180076/229937398-26be9fe3-e122-4894-84d5-2cb000256b4a.png)
 
   + Profile Page
-  ![image](https://user-images.githubusercontent.com/91180076/229937429-438e549a-9108-49d8-81a2-a0fe6d85a717.png)
+  ![image](https://user-images.githubusercontent.com/91180076/229939223-4cd61fb8-04f3-4686-9b90-b429e2ab20a6.png)
+
   
   ## Role: User
   + Table 
