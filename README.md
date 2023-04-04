@@ -24,25 +24,25 @@
 ## Main Functions
   
   ## Register Page
-  ![image](https://user-images.githubusercontent.com/91180076/229936634-6b6e1b16-8ce2-4e8e-8470-a554bf6fab3b.png)
-  
+  ![image](https://user-images.githubusercontent.com/91180076/229939463-f949989d-99d3-47ac-b2ea-3e16135fe48a.png)
+
   ## Login Page
-  ![image](https://user-images.githubusercontent.com/91180076/229936716-e1558698-4782-4c6c-a86e-e13ed51c25c2.png)
+  ![image](https://user-images.githubusercontent.com/91180076/229939492-307c7d74-ba73-4de3-a6f9-e02f7f69346e.png)
   
   ## Role: Admin
   + Dashboard Page
-  ![image](https://user-images.githubusercontent.com/91180076/229937039-4945dde1-f1e1-4801-8989-8c6b24342bc1.png)
+  ![image](https://user-images.githubusercontent.com/91180076/229939547-bfaede3a-3668-4342-a428-e49a2c77fef9.png)
 
   + Table Page
-  ![image](https://user-images.githubusercontent.com/91180076/229937398-26be9fe3-e122-4894-84d5-2cb000256b4a.png)
+  ![image](https://user-images.githubusercontent.com/91180076/229939609-26f4065a-e1f7-441b-bb95-fcb2a442f137.png)
 
   + Profile Page
-  ![image](https://user-images.githubusercontent.com/91180076/229939223-4cd61fb8-04f3-4686-9b90-b429e2ab20a6.png)
+  ![image](https://user-images.githubusercontent.com/91180076/229939573-114a0ee2-1252-442d-90ec-11bf6065681e.png)
 
   
   ## Role: User
   + Table 
-  ![image](https://user-images.githubusercontent.com/91180076/229937666-1c4197da-08d9-418e-b5a4-0676cac005f0.png)
+  ![image](https://user-images.githubusercontent.com/91180076/229939685-2cb6d7da-b354-477b-812f-b7d91df5cc11.png)
 
 ## Other Functions
   + Log out
